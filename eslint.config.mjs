@@ -23,6 +23,7 @@ export default [
       "no-console": "off",
       "@typescript-eslint/no-var-requires": "error",
       "@typescript-eslint/no-unused-expressions": "error",
+      "@typescript-eslint/no-this-alias": "error",
       "@typescript-eslint/no-explicit-any": "error",
       "no-restricted-syntax": [
           "error",
