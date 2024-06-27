@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import catchAsync from "../utils/catchAsync";
-import { User } from "../users/user.model";
+import { User } from "../module/users/user.model";
 import config from "../app/config";
-import { Role } from "../users/user.constant";
+import { Role } from "../module/users/user.constant";
 import AppError from "../Errors/AppError";
 
 export const auth = (...requiredRoles: (keyof typeof Role)[]) => {
@@ -18,16 +18,13 @@ export const auth = (...requiredRoles: (keyof typeof Role)[]) => {
 
     // if the token is sent from the client
     if (!token) {
-      throw new AppError(
-      401,
-        "You are not authorized to access this!",
-      );
+      throw new AppError(401, "You are not authorized to access this!");
     }
 
     const verifiedToken = jwt.verify(
       accessToken as string,
       config.jwt_access_secret as string
-    )
+    );
 
     const { role, email } = verifiedToken as JwtPayload;
 

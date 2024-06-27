@@ -1,8 +1,8 @@
 import httpStatus from "http-status";
 import { TLogin, TUser } from "./user.interface";
 import { User } from "./user.model";
-import AppError from "../Errors/AppError";
-import config from "../app/config";
+import AppError from "../../Errors/AppError";
+import config from "../../app/config";
 import jwt from "jsonwebtoken";
 
 const createUserIntoDB = async (payload: TUser) => {
@@ -12,13 +12,16 @@ const createUserIntoDB = async (payload: TUser) => {
 
 const loginUser = async (payload: TLogin) => {
   const user = await User.isUserExistsByCustomEmail(payload?.email);
-  console.log(user)
+  console.log(user);
 
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found!");
   }
 
-  const isPasswordMatched = await User.isPasswordMatched(payload.password, user.password);
+  const isPasswordMatched = await User.isPasswordMatched(
+    payload.password,
+    user.password
+  );
   if (!isPasswordMatched) {
     throw new AppError(httpStatus.FORBIDDEN, "Wrong password!");
   }
@@ -40,13 +43,7 @@ const loginUser = async (payload: TLogin) => {
   };
 };
 
-const updateUser = async (_id: string, payload: TUser) => {
-  const updatedUser = await User.findByIdAndUpdate(_id, payload, { new: true });
-  return updatedUser;
-};
-
 export const UserServices = {
   createUserIntoDB,
   loginUser,
-  updateUser,
 };
