@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
 import { TBooking } from "./booking.interface";
 
-// Mongoose schema
 const BookingSchema = new Schema<TBooking>(
   {
     customer: {
@@ -57,5 +56,4 @@ const BookingSchema = new Schema<TBooking>(
   },
 );
 
-// Create and export Mongoose model
 export const BookingModel = model<TBooking>("Booking", BookingSchema);
