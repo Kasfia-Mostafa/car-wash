@@ -8,7 +8,13 @@ const router = express.Router();
 router.post(
   "/signup",
   validateRequest(UserValidation.createUserValidationSchema),
-  UserControllers.createAdmin
+  UserControllers.createUser
+);
+
+router.post(
+  "/login",
+  // validateRequest(UserValidation.loginValidationSchema),
+  UserControllers.loginUser,
 );
 
 export const UserRoutes = router;

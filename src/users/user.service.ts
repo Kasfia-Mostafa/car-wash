@@ -1,16 +1,52 @@
-import { TUser } from "./user.interface";
+import httpStatus from "http-status";
+import { TLogin, TUser } from "./user.interface";
 import { User } from "./user.model";
+import AppError from "../Errors/AppError";
+import config from "../app/config";
+import jwt from "jsonwebtoken";
 
-const createAdminIntoDB = async (payload: TUser) => {
-  const admin = await User.create(payload);
-  return admin;
+const createUserIntoDB = async (payload: TUser) => {
+  const createdUser = await User.create(payload);
+  return createdUser;
 };
+
+const loginUser = async (payload: TLogin) => {
+  const user = await User.isUserExistsByCustomEmail(payload?.email);
+  console.log(user)
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found!");
+  }
+
+  const isPasswordMatched = await User.isPasswordMatched(payload.password, user.password);
+  if (!isPasswordMatched) {
+    throw new AppError(httpStatus.FORBIDDEN, "Wrong password!");
+  }
+
+  const jwtPayload = {
+    email: user.email,
+    role: user.role,
+  };
+
+  const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
+    expiresIn: config.jwt_access_expires_in,
+  });
+
+  user.password = "";
+
+  return {
+    accessToken,
+    user,
+  };
+};
+
 const updateUser = async (_id: string, payload: TUser) => {
-  const admin = await User.findByIdAndUpdate({ _id }, payload);
-  return admin;
+  const updatedUser = await User.findByIdAndUpdate(_id, payload, { new: true });
+  return updatedUser;
 };
 
 export const UserServices = {
-  createAdminIntoDB,
+  createUserIntoDB,
+  loginUser,
   updateUser,
 };

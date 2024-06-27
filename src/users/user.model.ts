@@ -1,10 +1,10 @@
 import { Schema, model } from "mongoose";
-import { TUser, UserModel } from "./user.interface";
+import {  TUserDocument, UserModel } from "./user.interface";
 import { Role } from "./user.constant";
-import bcryptjs from 'bcryptjs';
+import bcryptjs from "bcryptjs";
 import config from "../app/config";
 
-const userSchema = new Schema<TUser, UserModel>(
+const userSchema = new Schema<TUserDocument, UserModel>(
   {
     name: { type: String, required: true },
     email: {
@@ -27,23 +27,18 @@ const userSchema = new Schema<TUser, UserModel>(
 );
 
 userSchema.pre("save", async function (next) {
-  const user = this;
-
+  const user = this as TUserDocument;
   if (!user.isModified("password")) {
     return next();
   }
 
-  user.password = await bcryptjs.hash(
-    user.password,
-    Number(config.bcrypt_salt_round)
-  );
+  user.password = await bcryptjs.hash(user.password, Number(config.bcrypt_salt_round));
   next();
 });
 
-userSchema.post("save", function (doc, next) {
-  doc.password = "";
-  next();
-});
+userSchema.statics.isUserExistsByCustomEmail = async function (email: string) {
+  return await this.findOne({ email }).select("+password");
+};
 
 userSchema.statics.isPasswordMatched = async function (
   plainTextPassword: string,
@@ -52,4 +47,4 @@ userSchema.statics.isPasswordMatched = async function (
   return await bcryptjs.compare(plainTextPassword, hashedPassword);
 };
 
-export const User = model<TUser, UserModel>("User", userSchema);
+export const User = model<TUserDocument, UserModel>("User", userSchema);

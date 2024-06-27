@@ -1,4 +1,4 @@
-import { Model } from "mongoose";
+import { Model, Document } from "mongoose";
 import { Role } from "./user.constant";
 
 export interface TUser {
@@ -9,15 +9,17 @@ export interface TUser {
   role: keyof typeof Role;
   address: string;
 }
-export interface UserModel extends Model<TUser> {
-    isUserExistsByCustomId(id: string): Promise<TUser>;
-    isPasswordMatched(
-      plainTextPassword: string,
-      hashedPassword: string,
-    ): Promise<boolean>;
-    isJWTIssuedBeforePasswordChanged(
-      passwordChangedTimestamp: Date,
-      jwtIssuedTimestamp: number,
-    ): boolean;
-  }
-  
+
+// Extending the Document interface to include TUser fields
+export interface TUserDocument extends TUser, Document {}
+
+export interface UserModel extends Model<TUserDocument> {
+  isUserExistsByCustomEmail(email: string): Promise<TUserDocument | null>;
+  isPasswordMatched(plainTextPassword: string, hashedPassword: string): Promise<boolean>;
+  isJWTIssuedBeforePasswordChanged(passwordChangedTimestamp: Date, jwtIssuedTimestamp: number): boolean;
+}
+
+export type TLogin = {
+  email: string;
+  password: string;
+};
