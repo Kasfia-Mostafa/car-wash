@@ -13,6 +13,8 @@ const createSlot = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
+
 const getAvailableSlots = catchAsync(async (req, res) => {
   const result = await slotServices.getAvailableSlots(req?.query);
 

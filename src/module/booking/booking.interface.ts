@@ -1,7 +1,8 @@
 import { Schema } from "mongoose";
+
 export type TBooking = {
-  customer?: Schema.Types.ObjectId;
-  serviceId: Schema.Types.ObjectId;
+  customer?: Schema.Types.ObjectId; 
+  serviceId: Schema.Types.ObjectId; 
   slotId: Schema.Types.ObjectId;
   vehicleType:
     | "car"
@@ -13,9 +14,9 @@ export type TBooking = {
     | "electricVehicle"
     | "hybridVehicle"
     | "bicycle"
-    | "tractor";
-  vehicleBrand: string;
-  vehicleModel: string;
-  manufacturingYear: number;
-  registrationPlate: string;
+    | "tractor"; 
+  vehicleBrand: string; 
+  vehicleModel: string; 
+  manufacturingYear: number; 
+  registrationPlate: string; 
 };

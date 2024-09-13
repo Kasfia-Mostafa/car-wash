@@ -11,6 +11,8 @@ const userSchema = new Schema<TUser, UserModel>(
       type: String,
       required: [true, "Email is required"],
       unique: true,
+      lowercase: true,
+      trim: true,
     },
     password: {
       type: String,
@@ -19,27 +21,43 @@ const userSchema = new Schema<TUser, UserModel>(
     },
     phone: { type: String, required: true },
     role: { type: String, enum: Object.values(Role), required: true },
-    address: { type: String, required: true },
+    address: {
+      street: { type: String, required: true },
+      city: { type: String, required: true },
+      state: { type: String, required: true },
+      postalCode: { type: String, required: true },
+      country: { type: String, required: true },
+    },
   },
   {
     timestamps: true,
   }
 );
 
+// Hash the password before saving
 userSchema.pre("save", async function (next) {
-  this.password = await bcryptjs.hash(this.password, Number(config.bcrypt_salt_round));
+  if (this.isModified("password")) {
+    this.password = await bcryptjs.hash(this.password, Number(config.bcrypt_salt_round));
+  }
   next();
 });
 
+// Ensure password is not exposed
 userSchema.post("save", function (doc, next) {
-  doc.password = "";
+  doc.password = ""; 
   next();
 });
 
+// Static method to check if a user exists by email
 userSchema.statics.isUserExistsByCustomEmail = async function (email: string) {
-  return await this.findOne({ email }).select('+password');
+  const user = await this.findOne({ email }).select('+password');
+  if (!user) {
+    throw new Error("User not found");
+  }
+  return user;
 };
 
+// Static method to match the password
 userSchema.statics.isPasswordMatched = async function (
   plainTextPassword: string,
   hashedPassword: string

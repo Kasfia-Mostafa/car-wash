@@ -5,7 +5,6 @@ import sendResponse from "../../utils/sendResponse";
 
 const createCarService = catchAsync(async (req, res) => {
   const result = await CarServices.createCarServiceIntoDB(req.body);
-  // console.log(result)
   res.status(200).json({
     success: true,
     statusCode: httpStatus.OK,
@@ -32,7 +31,7 @@ const getSingleCarService = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Services retrieved successfully",
+    message: "Service retrieved successfully",
     data: result,
   });
 });
@@ -48,9 +47,29 @@ const updateCarService = catchAsync(async (req, res) => {
   });
 });
 
+// New delete function
+const deleteCarService = catchAsync(async (req, res) => {
+  const { carId } = req.params;
+  const result = await CarServices.deleteCarServiceFromDB(carId);
+
+  if (!result) {
+    return res.status(httpStatus.NOT_FOUND).json({
+      success: false,
+      message: "Car service not found",
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Car service deleted successfully!",
+    data: result,
+  });
+});
+
 export const CarServiceControllers = {
   createCarService,
   getAllCarService,
   getSingleCarService,
   updateCarService,
+  deleteCarService,
 };

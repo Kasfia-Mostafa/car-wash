@@ -3,7 +3,7 @@ import { CarServiceModel } from "./carService.model";
 
 const createCarServiceIntoDB = async (payload: CarService) => {
   const result = await CarServiceModel.create(payload);
-  console.log(result)
+  // console.log(result);
   return result;
 };
 
@@ -16,12 +16,19 @@ const getSingleCarServiceFromDB = async (id: string) => {
   const result = await CarServiceModel.findById(id);
   return result;
 };
+
 const updateCarServiceIntoDB = async (_id: string, payload: CarService) => {
   const updatedCarService = await CarServiceModel.findByIdAndUpdate(
     { _id },
-    payload
+    payload,
+    { new: true } 
   );
   return updatedCarService;
+};
+
+const deleteCarServiceFromDB = async (id: string) => {
+  const deletedCarService = await CarServiceModel.findByIdAndDelete(id);
+  return deletedCarService;
 };
 
 export const CarServices = {
@@ -29,4 +36,5 @@ export const CarServices = {
   getAllCarServiceFromDB,
   getSingleCarServiceFromDB,
   updateCarServiceIntoDB,
+  deleteCarServiceFromDB, 
 };

@@ -6,11 +6,22 @@ import config from "../../app/config";
 import jwt from "jsonwebtoken";
 
 const createUserIntoDB = async (payload: TUser) => {
+  console.log(payload);
   const createdUser = await User.create(payload);
   return createdUser;
 };
 
 const loginUser = async (payload: TLogin) => {
+  const { email, password } = payload;
+
+  // Check if email and password are provided
+  if (!email || !password) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Email and password are required!"
+    );
+  }
+
   const user = await User.isUserExistsByCustomEmail(payload?.email);
   console.log(user);
 

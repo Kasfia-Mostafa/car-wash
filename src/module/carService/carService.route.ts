@@ -15,12 +15,24 @@ router.post(
 );
 router.get("/", CarServiceControllers.getAllCarService);
 
-router.get("/:carId", CarServiceControllers.getSingleCarService);
+router.get(
+  "/:carId",
+  auth(Role.admin),
+  CarServiceControllers.getSingleCarService
+);
 
 router.put(
   "/:carId",
+  auth(Role.admin),
   validateRequest(carServiceValidation.CarServiceValidationSchema),
   CarServiceControllers.updateCarService
+);
+
+router.delete(
+  "/:carId",
+  auth(Role.admin),
+  validateRequest(carServiceValidation.CarServiceValidationSchema),
+  CarServiceControllers.deleteCarService
 );
 
 export const CarServiceRoutes = router;

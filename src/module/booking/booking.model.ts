@@ -1,30 +1,30 @@
 import { Schema, model } from "mongoose";
-import { TBooking } from "./booking.interface";
+import { TBooking } from "./booking.interface"; // Importing your type
 
 const BookingSchema = new Schema<TBooking>(
   {
     customer: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: "User", 
     },
     serviceId: {
       type: Schema.Types.ObjectId,
-      ref: "Service",
+      ref: "Service", 
       required: true,
     },
     slotId: {
       type: Schema.Types.ObjectId,
-      ref: "Slot",
+      ref: "Slots", 
       required: true,
     },
     vehicleType: {
       type: String,
       enum: [
         "car",
+        "motorcycle",
         "truck",
         "SUV",
         "van",
-        "motorcycle",
         "bus",
         "electricVehicle",
         "hybridVehicle",
@@ -52,7 +52,7 @@ const BookingSchema = new Schema<TBooking>(
     },
   },
   {
-    timestamps: true,
+    timestamps: true, 
   },
 );
 
