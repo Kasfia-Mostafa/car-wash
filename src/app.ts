@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import cors from "cors";
-import express, { Application, Request, Response } from "express";
+import express, { Application, Request, Response, NextFunction } from "express";
 import router from "./router";
 
 const app: Application = express();
@@ -12,11 +14,23 @@ app.use(express.json());
 app.use("/api", router);
 
 const test = (req: Request, res: Response) => {
-  // Promise.reject()
   const a = 10;
-  res.send(a);
+  res.send({ value: a });
 };
 
 app.get("/", test);
+
+// Global "Not Found" handler
+app.use((req: Request, res: Response) => {
+  res.status(404).json({ message: "Not Found" });
+});
+
+// Global error handling middleware
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  const statusCode = err.status || 500;
+  res.status(statusCode).json({
+    message: err.message || "Internal Server Error",
+  });
+});
 
 export default app;
