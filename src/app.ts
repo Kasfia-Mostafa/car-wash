@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import cors from "cors";
 import express, { Application, Request, Response, NextFunction } from "express";
 import router from "./router";

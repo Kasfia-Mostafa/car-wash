@@ -3,7 +3,6 @@ import { CarServiceModel } from "./carService.model";
 
 const createCarServiceIntoDB = async (payload: CarService) => {
   const result = await CarServiceModel.create(payload);
-  // console.log(result);
   return result;
 };
 

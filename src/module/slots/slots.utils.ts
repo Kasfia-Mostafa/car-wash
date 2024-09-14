@@ -2,9 +2,11 @@ import { ITimeSlot } from "./slots.interface";
 
 export const TimeSlots = (
   startTime: string,
-  endTime: string,
-  serviceDuration: number
+  endTime: string
 ): ITimeSlot[] => {
+  // Set serviceDuration to 60 minutes
+  const serviceDuration = 60;
+
   // Convert start and end times to minutes
   const [startHour, startMinute] = startTime.split(":").map(Number);
   const [endHour, endMinute] = endTime.split(":").map(Number);
@@ -13,7 +15,7 @@ export const TimeSlots = (
   const totalDuration = endMinutes - startMinutes;
 
   if (totalDuration <= 0 || totalDuration % serviceDuration !== 0) {
-    throw new Error("Invalid time range or service duration");
+    throw new Error("Invalid time range");
   }
 
   const numSlots = totalDuration / serviceDuration;
