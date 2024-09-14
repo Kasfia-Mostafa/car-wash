@@ -14,17 +14,17 @@ const BookingSchema = new mongoose_1.Schema({
     },
     slotId: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: "Slot",
+        ref: "Slots",
         required: true,
     },
     vehicleType: {
         type: String,
         enum: [
             "car",
+            "motorcycle",
             "truck",
             "SUV",
             "van",
-            "motorcycle",
             "bus",
             "electricVehicle",
             "hybridVehicle",

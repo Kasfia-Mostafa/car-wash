@@ -18,13 +18,17 @@ const app_1 = __importDefault(require("./app"));
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            // Connect to MongoDB
             yield mongoose_1.default.connect(config_1.default.database_url);
+            // console.log("Connected to the database successfully!");
+            // Start the Express server
             app_1.default.listen(config_1.default.port, () => {
                 console.log(`Car wash system listening on port ${config_1.default.port}`);
             });
         }
         catch (err) {
-            console.log(err);
+            console.error("Database connection error:", err);
+            process.exit(1); // Exit process with failure
         }
     });
 }

@@ -19,10 +19,16 @@ const AppError_1 = __importDefault(require("../../Errors/AppError"));
 const config_1 = __importDefault(require("../../app/config"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const createUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(payload);
     const createdUser = yield user_model_1.User.create(payload);
     return createdUser;
 });
 const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, password } = payload;
+    // Check if email and password are provided
+    if (!email || !password) {
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "Email and password are required!");
+    }
     const user = yield user_model_1.User.isUserExistsByCustomEmail(payload === null || payload === void 0 ? void 0 : payload.email);
     console.log(user);
     if (!user) {

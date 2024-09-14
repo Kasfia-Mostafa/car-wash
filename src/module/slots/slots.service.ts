@@ -20,12 +20,11 @@ const createSlotIntoDB = async (payload: TSlot) => {
     }
 
     const { startTime, endTime } = payload;
-    const serviceDuration = isServiceExist?.duration;
 
-    // Generate time slots based on the service duration
-    const timeSlots = TimeSlots(startTime, endTime, serviceDuration);
+    // Generate time slots based on startTime and endTime
+    const timeSlots = TimeSlots(startTime, endTime);
 
-    // Prepare slot payloads for batch insertion with proper formatting
+    // Prepare slot payloads
     const slotPayloads = timeSlots.map((slot) => ({
       service: payload?.service,
       date: payload?.date
@@ -38,12 +37,11 @@ const createSlotIntoDB = async (payload: TSlot) => {
       updatedAt: new Date().toISOString(),
     }));
 
-    // Batch insert all slots at once
+    // Batch insert all slots
     const createdSlots = await Slots.insertMany(slotPayloads);
 
     return createdSlots;
   } catch (error) {
-    // Narrow down the error type
     if (error instanceof Error) {
       throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, error.message);
     } else {
@@ -65,7 +63,7 @@ const getAvailableSlots = async (query: QueryParams) => {
     const parsedDate = new Date(date);
     if (!isNaN(parsedDate.getTime())) {
       // Check if valid date
-      queryObj.date = parsedDate.toISOString().split("T")[0]; 
+      queryObj.date = parsedDate.toISOString().split("T")[0];
     } else {
       throw new Error("Invalid date format");
     }

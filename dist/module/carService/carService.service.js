@@ -13,7 +13,6 @@ exports.CarServices = void 0;
 const carService_model_1 = require("./carService.model");
 const createCarServiceIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield carService_model_1.CarServiceModel.create(payload);
-    console.log(result);
     return result;
 });
 const getAllCarServiceFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -25,12 +24,17 @@ const getSingleCarServiceFromDB = (id) => __awaiter(void 0, void 0, void 0, func
     return result;
 });
 const updateCarServiceIntoDB = (_id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const updatedCarService = yield carService_model_1.CarServiceModel.findByIdAndUpdate({ _id }, payload);
+    const updatedCarService = yield carService_model_1.CarServiceModel.findByIdAndUpdate({ _id }, payload, { new: true });
     return updatedCarService;
+});
+const deleteCarServiceFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const deletedCarService = yield carService_model_1.CarServiceModel.findByIdAndDelete(id);
+    return deletedCarService;
 });
 exports.CarServices = {
     createCarServiceIntoDB,
     getAllCarServiceFromDB,
     getSingleCarServiceFromDB,
     updateCarServiceIntoDB,
+    deleteCarServiceFromDB,
 };

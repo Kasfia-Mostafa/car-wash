@@ -23,6 +23,8 @@ const userSchema = new mongoose_1.Schema({
         type: String,
         required: [true, "Email is required"],
         unique: true,
+        lowercase: true,
+        trim: true,
     },
     password: {
         type: String,
@@ -31,25 +33,41 @@ const userSchema = new mongoose_1.Schema({
     },
     phone: { type: String, required: true },
     role: { type: String, enum: Object.values(user_constant_1.Role), required: true },
-    address: { type: String, required: true },
+    address: {
+        street: { type: String, required: true },
+        city: { type: String, required: true },
+        state: { type: String, required: true },
+        postalCode: { type: String, required: true },
+        country: { type: String, required: true },
+    },
 }, {
     timestamps: true,
 });
+// Hash the password before saving
 userSchema.pre("save", function (next) {
     return __awaiter(this, void 0, void 0, function* () {
-        this.password = yield bcryptjs_1.default.hash(this.password, Number(config_1.default.bcrypt_salt_round));
+        if (this.isModified("password")) {
+            this.password = yield bcryptjs_1.default.hash(this.password, Number(config_1.default.bcrypt_salt_round));
+        }
         next();
     });
 });
+// Ensure password is not exposed
 userSchema.post("save", function (doc, next) {
     doc.password = "";
     next();
 });
+// Static method to check if a user exists by email
 userSchema.statics.isUserExistsByCustomEmail = function (email) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield this.findOne({ email }).select('+password');
+        const user = yield this.findOne({ email }).select('+password');
+        if (!user) {
+            throw new Error("User not found");
+        }
+        return user;
     });
 };
+// Static method to match the password
 userSchema.statics.isPasswordMatched = function (plainTextPassword, hashedPassword) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield bcryptjs_1.default.compare(plainTextPassword, hashedPassword);

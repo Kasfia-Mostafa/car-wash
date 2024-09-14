@@ -9,7 +9,7 @@ const slotSchema = new mongoose_1.Schema({
         required: true,
     },
     date: {
-        type: Date,
+        type: String,
         required: true,
     },
     startTime: {

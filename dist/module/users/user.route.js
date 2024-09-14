@@ -10,7 +10,5 @@ const validateRequest_1 = __importDefault(require("../../middleware/validateRequ
 const user_validation_1 = require("./user.validation");
 const router = express_1.default.Router();
 router.post("/signup", (0, validateRequest_1.default)(user_validation_1.UserValidation.createUserValidationSchema), user_controller_1.UserControllers.createUser);
-router.post("/login", 
-// validateRequest(UserValidation.loginValidationSchema),
-user_controller_1.UserControllers.loginUser);
+router.post("/login", (0, validateRequest_1.default)(user_validation_1.UserValidation.loginValidationSchema), user_controller_1.UserControllers.loginUser);
 exports.UserRoutes = router;
