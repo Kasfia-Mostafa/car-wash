@@ -1,4 +1,4 @@
-# Car Wash Booking System Project
+# Car Wash Booking System Project with mearn
 
 This project is the backend implementation for a Car Wash Booking System, focused on providing an easy way to book car wash services. The system allows users to create accounts, book available slots, manage services, and maintain booking records. This README outlines the setup and usage instructions for the project.
 
