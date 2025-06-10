@@ -2,7 +2,7 @@
 
 This project is the backend implementation for a Car Wash Booking System, focused on providing an easy way to book car wash services. The system allows users to create accounts, book available slots, manage services, and maintain booking records. This README outlines the setup and usage instructions for the project.
 
-## Technology Stack
+## Technology Stack Used
 
 - **Node.js**: JavaScript runtime for the backend.
 - **Express.js**: Web framework for building the API.
