@@ -6,7 +6,7 @@ This project is the backend implementation for a Car Wash Booking System, focuse
 
 - **Node.js**: JavaScript runtime for the backend.
 - **Express.js**: Web framework for building the API.
-- **MongoDB**: For database management.
+- **MongoDB**: For database management system.
 - **Mongoose**: MongoDB ODM for schema-based modeling.
 - **TypeScript**: Used for type safety and code maintainability.
 - **Zod**: For schema validation and request body validation.
